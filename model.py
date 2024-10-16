@@ -1,11 +1,16 @@
 import numpy as np
 
-def predict_amount(amounts, scaler, kmeans):
-    data_news = np.array([[amounts]])
+def predire_comportement_montant(client_id: str, nouveau_montant: float, kmeans_models: dict):
+    if client_id not in kmeans_models:
+        return "Aucun modèle disponible pour ce client."
 
-    data_scaled = scaler.transform(data_news)
+    kmeans, scaler = kmeans_models[client_id]
 
-    cluster = kmeans.predict(data_scaled)
+    nouvelle_donnee = np.array([[nouveau_montant]])
+
+    nouvelle_donnee_scaled = scaler.transform(nouvelle_donnee)
+
+    cluster = kmeans.predict(nouvelle_donnee_scaled)
 
     if cluster[0] == 0:
         return "Comportement normal."
